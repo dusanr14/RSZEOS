@@ -66,9 +66,9 @@ public class Driver {
     }
 
     public void useSpecialSkill(RNG rng){
-        if(rng.getRandomValue() < 10){
-            
-        }
+        //if(rng.getRandomValue() < 10){
+        //    
+        //}
     }
     
     
