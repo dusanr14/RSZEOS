@@ -1,0 +1,75 @@
+How to Use DataInputStream and DataOutputStream
+
+This page shows you how to use the java.io DataInputStream (in the API reference documentation) and DataOutputStream (in the API reference documentation) classes. 
+It features an example, DataIODemo (in a .java source file), that reads and writes tabular data (invoices for merchandise). 
+The tabular data is formatted in columns separated by tabs. The columns contain the sales price, the number of units ordered, and a description of the item. 
+Conceptually, the data looks like this, although it is read and written in binary form and is non-ASCII:
+
+19.99   12      Java T-shirt
+9.99    8       Java Mug
+
+DataOutputStream, like other filtered output streams, must be attached to another OutputStream. In this case, it's attached to a FileOutputStream that is set up to write to a file named invoice1.txt:
+
+DataOutputStream out = new DataOutputStream(
+                           new FileOutputStream("invoice1.txt"));
+
+Next, DataIODemo uses DataOutputStream's specialized write methods to write the invoice data contained within arrays in the program according to the type of data being written:
+for (int i = 0; i < prices.length; i ++) {
+    out.writeDouble(prices[i]);
+    out.writeChar('\t');
+    out.writeInt(units[i]);
+    out.writeChar('\t');
+    out.writeChars(descs[i]);
+    out.writeChar('\n');
+}
+out.close();
+
+Next, DataIODemo opens a DataInputStream on the file just written:
+DataInputStream in = new DataInputStream(
+                          new FileInputStream("invoice1.txt"));
+
+DataInputStream also must be attached to another InputStream; in this case, a FileInputStream set up to read the file just written, invoice1.txt. Then DataIODemo just reads the data back in using DataInputStream's specialized read methods.
+try {
+    while (true) {
+        price = in.readDouble();
+        in.readChar();       //throws out the tab
+        unit = in.readInt();
+        in.readChar();       //throws out the tab
+        char chr;
+        desc = new StringBuffer(20);
+        char lineSep = System.getProperty("line.separator").charAt(0);
+
+        while ((chr = in.readChar() != lineSep) {
+            desc.append(chr);
+        }
+
+        System.out.println("You've ordered " + unit +  " units of " 
+                           + desc + " at $" + price);
+        total = total + unit * price;
+    }    
+} catch (EOFException e) { }
+System.out.println("For a TOTAL of: $" + total);
+in.close();
+
+
+When all of the data has been read, DataIODemo displays a statement summarizing the order and the total amount owed and then closes the stream.
+Note the loop that DataIODemo uses to read the data from the DataInputStream. Normally, when data is read, you see loops like this:
+
+while ((input = in.read()) != null) {
+    . . .
+}
+The read method returns a value, null, which indicates that the end of the file has been reached. 
+Many of the DataInputStream read methods can't do this, because any value that could be returned to indicate the end of file may also be a legitimate value read from the stream. 
+For example, suppose that you want to use -1 to indicate end of file. 
+Well, you can't, because -1 is a legitimate value that can be read from the input stream, using readDouble, readInt, or one of the other methods that reads numbers. 
+So DataInputStreams read methods throw an EOFException instead. 
+When the EOFException occurs, the while (true) terminates.
+When you run the DataIODemo program you should see the following output:
+
+You've ordered 12 units of Java T-shirt at $19.99
+You've ordered 8 units of Java Mug at $9.99
+You've ordered 13 units of Duke Juggling Dolls at $15.99
+You've ordered 29 units of Java Pin at $3.99
+You've ordered 50 units of Java Key Chain at $4.99
+For a TOTAL of: $892.8800000000001
+
