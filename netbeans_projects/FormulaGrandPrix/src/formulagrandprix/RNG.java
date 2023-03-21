@@ -21,9 +21,13 @@ public class RNG {
     }
     
     public int getRandomValue(){
-        return minimumValue + rnd.nextInt(maximumValue);
+        return rnd.nextInt(maximumValue - minimumValue) + minimumValue;
     }
-
+    
+    static public int getRandomValue(int minimumValue, int maximumValue){
+        return rnd.nextInt(maximumValue - minimumValue) + minimumValue;
+    }
+    
     public int getMinimumValue() {
         return minimumValue;
     }

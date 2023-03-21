@@ -16,13 +16,22 @@ public class Driver {
     private int accumulated_Time;
     private int accumulatedPoints;
 
-    public Driver(String name, int ranking, String specialSkill, boolean eligibleToRace, int accumulated_Time, int accumulatedPoints) {
+    final int LOWER_TH_CORNERING = 1;
+    final int HIGHER_TH_CORNERING = 8;
+    
+    final int LOWER_TH_BREAKING = 1;
+    final int HIGHER_TH_BREAKING = 8;
+    
+    final int LOWER_TH_OVERTAKING = 10;
+    final int HIGHER_TH_OVERTAKING = 20;
+    
+    public Driver(String name, int ranking, String specialSkill) {
         this.name = name;
         this.ranking = ranking;
         this.specialSkill = specialSkill;
-        this.eligibleToRace = eligibleToRace;
-        this.accumulated_Time = accumulated_Time;
-        this.accumulatedPoints = accumulatedPoints;
+        this.eligibleToRace = true;
+        this.accumulated_Time = 0;
+        this.accumulatedPoints = 0;
     }
 
     public String getName() {
@@ -66,10 +75,21 @@ public class Driver {
     }
 
     public void useSpecialSkill(RNG rng){
-        //if(rng.getRandomValue() < 10){
-        //    
-        //}
+        int time_shortage = 0;
+        if (this.specialSkill.equals("cornering")){
+            time_shortage = RNG.getRandomValue(LOWER_TH_CORNERING,HIGHER_TH_CORNERING);
+        } else if (this.specialSkill.equals("breaking")) {
+            time_shortage = RNG.getRandomValue(LOWER_TH_BREAKING,HIGHER_TH_BREAKING);
+        } else if (this.specialSkill.equals("overtaking")) {
+            time_shortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
+        }
+        this.accumulated_Time -= time_shortage;
     }
     
+    @Override
+    public String toString() {
+        return "Name: " + this.name + "\n Special skill: " + this.specialSkill +
+                "\n Accumulated time: " + this.accumulated_Time +  "\n Accumulated points: " + this.accumulatedPoints;
+    }
     
 }
