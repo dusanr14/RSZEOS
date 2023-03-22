@@ -97,8 +97,8 @@ public class Driver implements Comparable<Driver> {
     }
     
     @Override
-	public int compareTo(Driver d) {
-            return Integer.compare(d.accumulatedTime, this.accumulatedTime);
-            
-        }
+    public int compareTo(Driver d) {
+        return Integer.compare(d.accumulatedTime, this.accumulatedTime);
+    }
+    
 }

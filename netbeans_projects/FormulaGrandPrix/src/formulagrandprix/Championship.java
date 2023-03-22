@@ -19,8 +19,6 @@ public class Championship {
     final int MAJOR_MECHANICAL_FAULT = 3;
     final int UNRECOVERABLE_MECHANICAL_FAULT = 1;
 
-
-            
     public ArrayList<Driver> getDrivers(int i) {
         return drivers;
     }
@@ -65,16 +63,14 @@ public class Championship {
         }
         else{
             System.out.println("No files found");
-        }
-        
+        }   
     }
-/*
+    
+   
     void prepareForTheRace(){
-       for(int i = 0; i < drivers.size(); i++){
-           drivers[i]
+       for (Driver d : drivers) {
+           
        }
     }
-*/
-
   
 }
