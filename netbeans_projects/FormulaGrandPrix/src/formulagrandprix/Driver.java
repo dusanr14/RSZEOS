@@ -4,18 +4,22 @@
  */
 package formulagrandprix;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author student
  */
-public class Driver {
+public class Driver implements Comparable<Driver> {
     private String name;
     private int ranking;
     private String specialSkill;
     private boolean eligibleToRace;
-    private int accumulated_Time;
+    private int accumulatedTime;
     private int accumulatedPoints;
-
+    
+    
     final int LOWER_TH_CORNERING = 1;
     final int HIGHER_TH_CORNERING = 8;
     
@@ -30,7 +34,7 @@ public class Driver {
         this.ranking = ranking;
         this.specialSkill = specialSkill;
         this.eligibleToRace = true;
-        this.accumulated_Time = 0;
+        this.accumulatedTime = 0;
         this.accumulatedPoints = 0;
     }
 
@@ -59,11 +63,11 @@ public class Driver {
     }
 
     public int getAccumulated_Time() {
-        return accumulated_Time;
+        return accumulatedTime;
     }
 
     public void setAccumulated_Time(int accumulated_Time) {
-        this.accumulated_Time = accumulated_Time;
+        this.accumulatedTime = accumulated_Time;
     }
 
     public int getAccumulatedPoints() {
@@ -83,13 +87,18 @@ public class Driver {
         } else if (this.specialSkill.equals("overtaking")) {
             time_shortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
         }
-        this.accumulated_Time -= time_shortage;
+        this.accumulatedTime -= time_shortage;
     }
     
     @Override
     public String toString() {
         return "Name: " + this.name + "\n Special skill: " + this.specialSkill +
-                "\n Accumulated time: " + this.accumulated_Time +  "\n Accumulated points: " + this.accumulatedPoints;
+                "\n Accumulated time: " + this.accumulatedTime +  "\n Accumulated points: " + this.accumulatedPoints;
     }
     
+    @Override
+	public int compareTo(Driver d) {
+            return Integer.compare(d.accumulatedTime, this.accumulatedTime);
+            
+        }
 }
