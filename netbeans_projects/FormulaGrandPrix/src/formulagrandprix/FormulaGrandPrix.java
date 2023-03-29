@@ -30,9 +30,7 @@ public class FormulaGrandPrix {
         
         Championship championship = new Championship();
         Scanner sc = new Scanner(System.in);
-        //championship.drivers(0);
         string1 = sc.nextLine();
-        //numOfRaces = Integer.getInteger(string1);
         res = Integer.parseInt(string1) + 100;
         System.out.println(res);
         
@@ -41,16 +39,29 @@ public class FormulaGrandPrix {
         championship.prepareForTheRace();
         
         
-        //for(int i = 0; i < 8; i ++){
-        //    championship.drivers(i).toString();
-        //}
+        for(int i = 0; i < 8; i ++){
+            championship.drivers.get(i).setAccumulatedTime(RNG.getRandomValue(0,99));
+        }
+        for(int i = 0; i < 8; i ++){
+            championship.drivers.get(i).setAccumulatedPoints(RNG.getRandomValue(0,99));
+        }
+        
+        sortDriversByTime(championship);
+        
+        System.out.println(championship.printDrivers());
+        
+        sortDriversByPoints(championship);
+        
+        System.out.println(championship.printDrivers());
+       
+        championship.printLeader(4);
     }
     
-    /** METODA ZA SORTIRANJE STUDENATA****/
-	public static void sortirajVozacePoBrojuIndeksa(Championship championship){
+	public static void sortDriversByTime(Championship championship){
 		Collections.sort(championship.drivers);
 	}
-        
-        
+        public static void sortDriversByPoints(Championship championship){
+		Collections.sort(championship.drivers, new DriverPointsComparator(-1));
+	}
         
 }

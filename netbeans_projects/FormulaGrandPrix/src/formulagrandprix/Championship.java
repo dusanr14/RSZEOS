@@ -19,16 +19,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 
 public class Championship {
     public static ArrayList<Driver> drivers = new ArrayList<Driver>();
     public static ArrayList<Venue> venues = new ArrayList<Venue>();
     
-    final int MINOR_MECHANICAL_FAULT = 5;
-    final int MAJOR_MECHANICAL_FAULT = 3;
-    final int UNRECOVERABLE_MECHANICAL_FAULT = 1;
-
+    final int MINOR_MECHANICAL_FAULT_PROPABILITY = 5;
+    final int MAJOR_MECHANICAL_FAULT_PROPABILITY = 3;
+    final int UNRECOVERABLE_MECHANICAL_FAULT_PROPABILITY = 1;
+    
+    final int MINOR_REPARE_TIME = 20;
+    final int MAJOR_REPARE_TIME = 20;
+    
+    final int SECOND_PLACE_INITIAL_DELAY = 3;
+    final int THIRD_PLACE_INITIAL_DELAY = 5;
+    final int FOURTH_PLACE_INITIAL_DELAY = 7;
+    final int LAST_PLACES_INITIAL_DELAY = 10;
+    
     public ArrayList<Driver> getDrivers(int i) {
         return drivers;
     }
@@ -81,24 +90,62 @@ public class Championship {
         String s = new String();
         for(Driver d : drivers) {
         s = s + "Name: " + d.getName() + "\nSpecial skill: " + d.getSpecialSkill() +
-                "\nAccumulated time: " + d.getAccumulatedTime() +  "\nAccumulated points: " + d.getAccumulatedPoints()+"\n";
+                "\nAccumulated time: " + d.getAccumulatedTime() +  "\nAccumulated points: " + d.getAccumulatedPoints()+"\n\n";
         }
         return s;
     }
     
-    public void sortirajVozacePoVremenu(){
-		Collections.sort(this.drivers);
-	}
-    
-    static void prepareForTheRace(){
-       for (Driver d : drivers) {
-           d.setAccumulatedTime(RNG.getRandomValue(0, 8));
+     void prepareForTheRace(){
+       Collections.sort(this.drivers, new DriverPointsComparator(-1));
+       if(this.drivers.get(1).isEligibleToRace())
+       this.drivers.get(1).setAccumulatedPoints(this.drivers.get(1).getAccumulatedPoints() + SECOND_PLACE_INITIAL_DELAY);
+       if(this.drivers.get(2).isEligibleToRace())
+       this.drivers.get(2).setAccumulatedPoints(this.drivers.get(2).getAccumulatedPoints() + THIRD_PLACE_INITIAL_DELAY);
+       if(this.drivers.get(3).isEligibleToRace())
+       this.drivers.get(3).setAccumulatedPoints(this.drivers.get(3).getAccumulatedPoints() + FOURTH_PLACE_INITIAL_DELAY);
+       for (int i = 4; i < drivers.size(); i++) {
+           if(this.drivers.get(i).isEligibleToRace())
+           this.drivers.get(i).setAccumulatedPoints(this.drivers.get(i).getAccumulatedPoints() + LAST_PLACES_INITIAL_DELAY);
        }
     }
     
+    void driveAverageLapTime(int i){
+        int temp_time = this.venues.get(i).getAverageLapTime(); ;
+        for (Driver d : drivers) {
+           if(d.isEligibleToRace())
+           d.setAccumulatedTime(d.getAccumulatedTime() + temp_time);
+       }
+    }
     
+    void applySpecialSkills(){
+        for (Driver d : drivers) {
+           d.useSpecialSkill();
+       }
+    }
+    void checkMechanicalProblem(){
+        int rand_num_100;
+        for (Driver d : drivers) {
+           if(d.isEligibleToRace()){
+                rand_num_100 = RNG.getRandomValue(0, 99);
+                if(rand_num_100 < MINOR_MECHANICAL_FAULT_PROPABILITY){
+                    d.setAccumulatedTime(d.getAccumulatedTime() + MINOR_REPARE_TIME);
+                    System.out.println("Driver "+ d.getName()+" has minor mechanical fault. \n");
+                }else if (rand_num_100 >= MINOR_MECHANICAL_FAULT_PROPABILITY && rand_num_100 < MINOR_MECHANICAL_FAULT_PROPABILITY + MAJOR_MECHANICAL_FAULT_PROPABILITY){
+                    d.setAccumulatedTime(d.getAccumulatedTime() + MAJOR_REPARE_TIME);
+                    System.out.println("Driver "+ d.getName()+" has major mechanical fault. \n");
+                }else if(rand_num_100 == 99){
+                    d.setEligibleToRace(false);
+                    System.out.println("Driver "+ d.getName()+" is eleminated form the race. \n");
+                }
+           }
+       }
+    }
     
-    
+    void printLeader(int lap){
+        Collections.sort(this.drivers, new DriverPointsComparator(-1));
+        System.out.println("Leader: \n");
+        System.out.println(this.drivers.get(0));
+    }
     
     /** METODA ZA SORTIRANJE STUDENATA****/
 

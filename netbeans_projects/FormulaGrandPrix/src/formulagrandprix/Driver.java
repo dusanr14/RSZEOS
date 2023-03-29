@@ -18,7 +18,7 @@ public class Driver implements Comparable<Driver> {
     private boolean eligibleToRace;
     private int accumulatedTime;
     private int accumulatedPoints;
-    
+    private boolean rain_tires;
     
     final int LOWER_TH_CORNERING = 1;
     final int HIGHER_TH_CORNERING = 8;
@@ -36,6 +36,7 @@ public class Driver implements Comparable<Driver> {
         this.eligibleToRace = true;
         this.accumulatedTime = 0;
         this.accumulatedPoints = 0;
+        this.rain_tires = false;
     }
 
     public String getName() {
@@ -78,7 +79,15 @@ public class Driver implements Comparable<Driver> {
         this.accumulatedPoints = accumulatedPoints;
     }
 
-    public void useSpecialSkill(RNG rng){
+    public boolean isRain_tires() {
+        return rain_tires;
+    }
+
+    public void setRain_tires(boolean rain_tires) {
+        this.rain_tires = rain_tires;
+    }
+    
+    public void useSpecialSkill(){
         int timeShortage = 0;
         if (this.specialSkill.equals("cornering")){
             timeShortage = RNG.getRandomValue(LOWER_TH_CORNERING,HIGHER_TH_CORNERING);
