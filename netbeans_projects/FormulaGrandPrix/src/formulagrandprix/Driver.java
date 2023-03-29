@@ -62,12 +62,12 @@ public class Driver implements Comparable<Driver> {
         this.eligibleToRace = eligibleToRace;
     }
 
-    public int getAccumulated_Time() {
+    public int getAccumulatedTime() {
         return accumulatedTime;
     }
 
-    public void setAccumulated_Time(int accumulated_Time) {
-        this.accumulatedTime = accumulated_Time;
+    public void setAccumulatedTime(int accumulatedTime) {
+        this.accumulatedTime = accumulatedTime;
     }
 
     public int getAccumulatedPoints() {
@@ -79,15 +79,15 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void useSpecialSkill(RNG rng){
-        int time_shortage = 0;
+        int timeShortage = 0;
         if (this.specialSkill.equals("cornering")){
-            time_shortage = RNG.getRandomValue(LOWER_TH_CORNERING,HIGHER_TH_CORNERING);
+            timeShortage = RNG.getRandomValue(LOWER_TH_CORNERING,HIGHER_TH_CORNERING);
         } else if (this.specialSkill.equals("breaking")) {
-            time_shortage = RNG.getRandomValue(LOWER_TH_BREAKING,HIGHER_TH_BREAKING);
+            timeShortage = RNG.getRandomValue(LOWER_TH_BREAKING,HIGHER_TH_BREAKING);
         } else if (this.specialSkill.equals("overtaking")) {
-            time_shortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
+            timeShortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
         }
-        this.accumulatedTime -= time_shortage;
+        this.accumulatedTime -= timeShortage;
     }
     
     @Override

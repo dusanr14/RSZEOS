@@ -1,2 +1,0 @@
-vezbe3.primer1.Serialization_Example
-vezbe3.primer1.Student
