@@ -18,7 +18,7 @@ public class Driver implements Comparable<Driver> {
     private boolean eligibleToRace;
     private int accumulatedTime;
     private int accumulatedPoints;
-    private boolean rain_tires;
+    private boolean rainTires;
     
     final int LOWER_TH_CORNERING = 1;
     final int HIGHER_TH_CORNERING = 8;
@@ -36,7 +36,7 @@ public class Driver implements Comparable<Driver> {
         this.eligibleToRace = true;
         this.accumulatedTime = 0;
         this.accumulatedPoints = 0;
-        this.rain_tires = false;
+        this.rainTires = false;
     }
 
     public String getName() {
@@ -79,35 +79,53 @@ public class Driver implements Comparable<Driver> {
         this.accumulatedPoints = accumulatedPoints;
     }
 
-    public boolean isRain_tires() {
-        return rain_tires;
+    public boolean getRainTires() {
+        return rainTires;
     }
 
-    public void setRain_tires(boolean rain_tires) {
-        this.rain_tires = rain_tires;
+    public void setRainTires(boolean rainTires) {
+        this.rainTires = rainTires;
     }
     
-    public void useSpecialSkill(){
+    public boolean useSpecialSkill(int lapNumber){
+        boolean temp = false;
         int timeShortage = 0;
-        if (this.specialSkill.equals("cornering")){
+        if (this.specialSkill.equals("Cornering")){
             timeShortage = RNG.getRandomValue(LOWER_TH_CORNERING,HIGHER_TH_CORNERING);
-        } else if (this.specialSkill.equals("breaking")) {
+            temp = true;
+        } else if (this.specialSkill.equals("Braking")) {
             timeShortage = RNG.getRandomValue(LOWER_TH_BREAKING,HIGHER_TH_BREAKING);
-        } else if (this.specialSkill.equals("overtaking")) {
-            timeShortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
+            temp = true;
+        } else if (this.specialSkill.equals("Overtaking")) {
+            if(lapNumber % 3 == 2){
+                timeShortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
+                temp = true;
+            }
         }
         this.accumulatedTime -= timeShortage;
+        return temp;
     }
     
     @Override
     public String toString() {
         return "Name: " + this.name + "\n Special skill: " + this.specialSkill +
-                "\n Accumulated time: " + this.accumulatedTime +  "\n Accumulated points: " + this.accumulatedPoints;
+                "\n Accumulated time: " + this.accumulatedTime +  "\n Accumulated points: " + this.accumulatedPoints+
+                "\n Ranking: " + this.ranking;
     }
     
     @Override
     public int compareTo(Driver d) {
-        return Integer.compare(d.accumulatedTime, this.accumulatedTime);
+        return -Integer.compare(d.accumulatedTime, this.accumulatedTime);
     }
     
+    public boolean changeTire(int lap){
+        boolean temp;
+        if(lap == 1 && RNG.getRandomValue(0,1)== 0){
+            temp = true;
+        }else{
+            temp = false;
+        }
+        this.rainTires = temp;
+        return temp;
+    }
 }

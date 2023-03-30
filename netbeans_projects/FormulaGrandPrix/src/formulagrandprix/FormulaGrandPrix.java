@@ -21,47 +21,67 @@ public class FormulaGrandPrix {
     public static void main(String[] args) throws IOException {
         
         int numOfRaces = 0;
+        int race = 0;
         int res = 0;
         // TODO code application logic here
         //Driver driver = new Driver("Milan",3,"overtaking");
         //System.out.println(driver.toString());
         
         String string1;
-        
-        Championship championship = new Championship();
+        String string2;
         Scanner sc = new Scanner(System.in);
-        string1 = sc.nextLine();
-        res = Integer.parseInt(string1) + 100;
-        System.out.println(res);
+        Championship championship = new Championship();
+        do{
+            System.out.println("Odaberi broj trka u sampionatu (od 3 do 5):");
+            string1 = sc.nextLine();
+            numOfRaces = Integer.parseInt(string1);
+        }while(numOfRaces < 3 || numOfRaces > 5);
         
-        System.out.println(championship.printDrivers());
-        
-        championship.prepareForTheRace();
-        
-        
-        for(int i = 0; i < 8; i ++){
-            championship.drivers.get(i).setAccumulatedTime(RNG.getRandomValue(0,99));
+        for(int i = 0; i < championship.getVenues().size(); i++){
+            System.out.println("Odaberi trku broj "+ i+1 + ":");
+            for(int j = 0; j < championship.getVenues().size(); j++){
+                System.out.println(j +". "+championship.getVenues().get(j).getVenueName());
+            }
+            string2 = sc.nextLine();
+            race = Integer.parseInt(string2);
+            System.out.println("Race No "+ i + "START!!!\n\n");
+            if(i == 0){
+                sortDriversByRank(championship);
+            }
+            else{
+                sortDriversByPoints(championship);
+            }
+            
+            championship.prepareForTheRace();
+            for (int j = 0; j < championship.getVenues().get(race).getNumberOfLaps(); j++){
+                championship.changeTires(j);
+                championship.RainLap(championship.getVenues().get(race));
+                championship.driveAverageLapTime(i);
+                championship.applySpecialSkills(j);
+                championship.checkMechanicalProblem();
+                sortDriversByTime(championship);
+                championship.printLeader(0);
+                string2 = sc.nextLine();
+            }
+            championship.getVenues().remove(i);
+            
+            championship.assignPointsAfterVenue();
+            for (Driver d : championship.getDrivers()) {
+                d.setEligibleToRace(true);
+                d.setRainTires(false);
+            }
         }
-        for(int i = 0; i < 8; i ++){
-            championship.drivers.get(i).setAccumulatedPoints(RNG.getRandomValue(0,99));
-        }
-        
-        sortDriversByTime(championship);
-        
-        System.out.println(championship.printDrivers());
-        
-        sortDriversByPoints(championship);
-        
-        System.out.println(championship.printDrivers());
-       
-        championship.printLeader(4);
+        championship.printChampion();
     }
     
 	public static void sortDriversByTime(Championship championship){
-		Collections.sort(championship.drivers);
+		Collections.sort(championship.getDrivers());
 	}
         public static void sortDriversByPoints(Championship championship){
-		Collections.sort(championship.drivers, new DriverPointsComparator(-1));
+		Collections.sort(championship.getDrivers(), new DriverPointsComparator(-1));
+	}
+        public static void sortDriversByRank(Championship championship){
+		Collections.sort(championship.getDrivers(), new DriverRankingComparator(1));
 	}
         
 }

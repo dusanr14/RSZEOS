@@ -23,22 +23,22 @@ import java.util.Collections;
 import java.util.List;
 
 public class Championship {
-    public static ArrayList<Driver> drivers = new ArrayList<Driver>();
-    public static ArrayList<Venue> venues = new ArrayList<Venue>();
+    private  ArrayList<Driver> drivers;
+    private  ArrayList<Venue> venues;
     
     final int MINOR_MECHANICAL_FAULT_PROPABILITY = 5;
     final int MAJOR_MECHANICAL_FAULT_PROPABILITY = 3;
     final int UNRECOVERABLE_MECHANICAL_FAULT_PROPABILITY = 1;
     
     final int MINOR_REPARE_TIME = 20;
-    final int MAJOR_REPARE_TIME = 20;
+    final int MAJOR_REPARE_TIME = 120;
     
     final int SECOND_PLACE_INITIAL_DELAY = 3;
     final int THIRD_PLACE_INITIAL_DELAY = 5;
     final int FOURTH_PLACE_INITIAL_DELAY = 7;
     final int LAST_PLACES_INITIAL_DELAY = 10;
     
-    public ArrayList<Driver> getDrivers(int i) {
+    public ArrayList<Driver> getDrivers() {
         return drivers;
     }
 
@@ -55,8 +55,8 @@ public class Championship {
     }
     
     public Championship() throws FileNotFoundException, IOException {
-        //this.drivers = new ArrayList<>();
-        //this.venues = new ArrayList<>();
+        this.drivers = new ArrayList<>();
+        this.venues = new ArrayList<>();
         
         File staze_file = new File("staze.txt");
         File vozaci_file = new File("vozaci.txt");
@@ -90,7 +90,7 @@ public class Championship {
         String s = new String();
         for(Driver d : drivers) {
         s = s + "Name: " + d.getName() + "\nSpecial skill: " + d.getSpecialSkill() +
-                "\nAccumulated time: " + d.getAccumulatedTime() +  "\nAccumulated points: " + d.getAccumulatedPoints()+"\n\n";
+                "\nAccumulated time: " + d.getAccumulatedTime() +  "\nAccumulated points: " + d.getAccumulatedPoints()+"\n Ranking: " + d.getRanking()+"\n\n";
         }
         return s;
     }
@@ -98,14 +98,14 @@ public class Championship {
      void prepareForTheRace(){
        Collections.sort(this.drivers, new DriverPointsComparator(-1));
        if(this.drivers.get(1).isEligibleToRace())
-       this.drivers.get(1).setAccumulatedPoints(this.drivers.get(1).getAccumulatedPoints() + SECOND_PLACE_INITIAL_DELAY);
+       this.drivers.get(1).setAccumulatedTime(this.drivers.get(1).getAccumulatedTime() + SECOND_PLACE_INITIAL_DELAY);
        if(this.drivers.get(2).isEligibleToRace())
-       this.drivers.get(2).setAccumulatedPoints(this.drivers.get(2).getAccumulatedPoints() + THIRD_PLACE_INITIAL_DELAY);
+       this.drivers.get(2).setAccumulatedTime(this.drivers.get(2).getAccumulatedTime() + THIRD_PLACE_INITIAL_DELAY);
        if(this.drivers.get(3).isEligibleToRace())
-       this.drivers.get(3).setAccumulatedPoints(this.drivers.get(3).getAccumulatedPoints() + FOURTH_PLACE_INITIAL_DELAY);
+       this.drivers.get(3).setAccumulatedTime(this.drivers.get(3).getAccumulatedTime() + FOURTH_PLACE_INITIAL_DELAY);
        for (int i = 4; i < drivers.size(); i++) {
            if(this.drivers.get(i).isEligibleToRace())
-           this.drivers.get(i).setAccumulatedPoints(this.drivers.get(i).getAccumulatedPoints() + LAST_PLACES_INITIAL_DELAY);
+           this.drivers.get(i).setAccumulatedTime(this.drivers.get(i).getAccumulatedTime() + LAST_PLACES_INITIAL_DELAY);
        }
     }
     
@@ -117,11 +117,14 @@ public class Championship {
        }
     }
     
-    void applySpecialSkills(){
+    void applySpecialSkills(int lapNumber){
         for (Driver d : drivers) {
-           d.useSpecialSkill();
+           if(d.useSpecialSkill(lapNumber)){
+            System.out.println("Driver "+ d.getName()+" applied his special skill" +d.getSpecialSkill()+" \n");
+           }
        }
     }
+    
     void checkMechanicalProblem(){
         int rand_num_100;
         for (Driver d : drivers) {
@@ -142,11 +145,46 @@ public class Championship {
     }
     
     void printLeader(int lap){
-        Collections.sort(this.drivers, new DriverPointsComparator(-1));
+        Collections.sort(this.drivers);
         System.out.println("Leader: \n");
-        System.out.println(this.drivers.get(0));
+        System.out.println(this.drivers.get(0) + "\n");
     }
     
+    void printChampion(){
+        Collections.sort(this.drivers, new DriverPointsComparator(-1));
+        System.out.println("Champion: \n");
+        System.out.println(this.drivers.get(0) + "\n");
+    }
+    
+    void assignPointsAfterVenue(){
+        Collections.sort(this.drivers);
+        drivers.get(0).setAccumulatedPoints(drivers.get(0).getAccumulatedPoints() + 8);
+        drivers.get(1).setAccumulatedPoints(drivers.get(1).getAccumulatedPoints() + 5);
+        drivers.get(2).setAccumulatedPoints(drivers.get(2).getAccumulatedPoints() + 3);
+        drivers.get(3).setAccumulatedPoints(drivers.get(3).getAccumulatedPoints() + 1);
+        for (Driver d : drivers) {
+            d.setAccumulatedTime(0);
+        }
+    }
+    
+    public void changeTires(int Lap){
+        for (Driver d : drivers) {
+            if(d.changeTire(Lap)){
+                System.out.println("Driver "+ d.getName()+" changed tires. \n");
+            }
+        }
+    }
+    
+    public void RainLap(Venue venue){
+        if(RNG.getRandomValue(0, 99) < (venue.getChanceOfRain()*100)){
+            for (Driver d : drivers) {
+                if(d.getRainTires()== false){
+                    d.setAccumulatedTime(d.getAccumulatedTime() + 5);
+                    System.out.println("Driver "+ d.getName()+" has no rain tires. \n");
+                }
+            }
+        }
+    }
     /** METODA ZA SORTIRANJE STUDENATA****/
 
 }

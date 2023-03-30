@@ -38,5 +38,9 @@ public class Venue {
         return venueName;
     }
     
-    
+    @Override
+    public String toString() {
+        return "Venue name: " + this.venueName + "\n Average Lap Time: " + this.averageLapTime +
+                "\n Number of Laps: " + this.numberOfLaps +  "\n Chance of Rain: " + this.chanceOfRain + "\n\n";
+    }
 }

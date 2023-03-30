@@ -1,4 +1,4 @@
-Albert Park Raceway Australia,3,79,0.05
+Albert Park Raceway Australia,3,80,0.05
 Shanghai International Circuit China,4,87,0.08
 Circuit Paul Richard France,2,69,0.14
 Autodromo Nazionale Monza Italy,3,48,0.12
