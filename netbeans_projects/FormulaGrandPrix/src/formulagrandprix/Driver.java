@@ -108,9 +108,9 @@ public class Driver implements Comparable<Driver> {
     
     @Override
     public String toString() {
-        return "Name: " + this.name + "\n Special skill: " + this.specialSkill +
-                "\n Accumulated time: " + this.accumulatedTime +  "\n Accumulated points: " + this.accumulatedPoints+
-                "\n Ranking: " + this.ranking;
+        return "Name: " + this.name + "\nSpecial skill: " + this.specialSkill +
+                "\nAccumulated time: " + this.accumulatedTime +  "\nAccumulated points: " + this.accumulatedPoints+
+                "\nRanking: " + this.ranking;
     }
     
     @Override

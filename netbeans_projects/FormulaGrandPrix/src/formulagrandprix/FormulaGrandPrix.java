@@ -23,10 +23,11 @@ public class FormulaGrandPrix {
         int numOfRaces = 0;
         int race = 0;
         int res = 0;
+        
+        int t;
         // TODO code application logic here
         //Driver driver = new Driver("Milan",3,"overtaking");
         //System.out.println(driver.toString());
-        
         String string1;
         String string2;
         Scanner sc = new Scanner(System.in);
@@ -37,13 +38,15 @@ public class FormulaGrandPrix {
             numOfRaces = Integer.parseInt(string1);
         }while(numOfRaces < 3 || numOfRaces > 5);
         
-        for(int i = 0; i < championship.getVenues().size(); i++){
-            System.out.println("Odaberi trku broj "+ i+1 + ":");
+        for(int i = 0; i < numOfRaces; i++){
+            System.out.println("Odaberi trku broj "+ i + ":");
             for(int j = 0; j < championship.getVenues().size(); j++){
                 System.out.println(j +". "+championship.getVenues().get(j).getVenueName());
             }
-            string2 = sc.nextLine();
-            race = Integer.parseInt(string2);
+            do{
+                string2 = sc.nextLine();
+                race = Integer.parseInt(string2);
+            }while(race < 0 || race >= championship.getVenues().size() );
             System.out.println("Race No "+ i + "START!!!\n\n");
             if(i == 0){
                 sortDriversByRank(championship);
@@ -72,6 +75,10 @@ public class FormulaGrandPrix {
             }
         }
         championship.printChampion();
+        sortDriversByPoints(championship);
+        for(Driver d: championship.getDrivers()){
+            System.out.println(d);
+        }
     }
     
 	public static void sortDriversByTime(Championship championship){

@@ -119,9 +119,8 @@ public class Championship {
     
     void applySpecialSkills(int lapNumber){
         for (Driver d : drivers) {
-           if(d.useSpecialSkill(lapNumber)){
-            System.out.println("Driver "+ d.getName()+" applied his special skill" +d.getSpecialSkill()+" \n");
-           }
+           d.useSpecialSkill(lapNumber);
+            //System.out.println( d.getName()+": " +d.getSpecialSkill());
        }
     }
     
@@ -138,6 +137,7 @@ public class Championship {
                     System.out.println("Driver "+ d.getName()+" has major mechanical fault. \n");
                 }else if(rand_num_100 == 99){
                     d.setEligibleToRace(false);
+                    d.setAccumulatedTime(1000);
                     System.out.println("Driver "+ d.getName()+" is eleminated form the race. \n");
                 }
            }
@@ -171,12 +171,14 @@ public class Championship {
         for (Driver d : drivers) {
             if(d.changeTire(Lap)){
                 System.out.println("Driver "+ d.getName()+" changed tires. \n");
+                d.setAccumulatedTime(d.getAccumulatedTime() + 10);
             }
         }
     }
     
     public void RainLap(Venue venue){
         if(RNG.getRandomValue(0, 99) < (venue.getChanceOfRain()*100)){
+            System.out.println("PADA KISA!!!");
             for (Driver d : drivers) {
                 if(d.getRainTires()== false){
                     d.setAccumulatedTime(d.getAccumulatedTime() + 5);
