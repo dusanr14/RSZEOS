@@ -47,7 +47,9 @@ public class FormulaGrandPrix {
                 string2 = sc.nextLine();
                 race = Integer.parseInt(string2);
             }while(race < 0 || race >= championship.getVenues().size() );
-            System.out.println("Race No "+ i + "START!!!\n\n");
+            
+            System.out.println("Venue :"+ championship.getVenues().get(race).getVenueName() +" START!!!\n\n");
+            
             if(i == 0){
                 sortDriversByRank(championship);
             }
@@ -59,26 +61,28 @@ public class FormulaGrandPrix {
             for (int j = 0; j < championship.getVenues().get(race).getNumberOfLaps(); j++){
                 championship.changeTires(j);
                 championship.RainLap(championship.getVenues().get(race));
-                championship.driveAverageLapTime(i);
+                championship.driveAverageLapTime(race);
                 championship.applySpecialSkills(j);
                 championship.checkMechanicalProblem();
                 sortDriversByTime(championship);
                 championship.printLeader(0);
+                System.out.println(championship.printDrivers());
                 string2 = sc.nextLine();
             }
             championship.getVenues().remove(i);
             
             championship.assignPointsAfterVenue();
+            System.out.println(championship.printDrivers());
             for (Driver d : championship.getDrivers()) {
                 d.setEligibleToRace(true);
                 d.setRainTires(false);
             }
         }
+        
         championship.printChampion();
         sortDriversByPoints(championship);
-        for(Driver d: championship.getDrivers()){
-            System.out.println(d);
-        }
+        
+        //System.out.println(championship.printDrivers());
     }
     
 	public static void sortDriversByTime(Championship championship){

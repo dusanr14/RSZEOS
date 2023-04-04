@@ -96,17 +96,23 @@ public class Championship {
     }
     
      void prepareForTheRace(){
-       Collections.sort(this.drivers, new DriverPointsComparator(-1));
-       if(this.drivers.get(1).isEligibleToRace())
-       this.drivers.get(1).setAccumulatedTime(this.drivers.get(1).getAccumulatedTime() + SECOND_PLACE_INITIAL_DELAY);
-       if(this.drivers.get(2).isEligibleToRace())
-       this.drivers.get(2).setAccumulatedTime(this.drivers.get(2).getAccumulatedTime() + THIRD_PLACE_INITIAL_DELAY);
-       if(this.drivers.get(3).isEligibleToRace())
-       this.drivers.get(3).setAccumulatedTime(this.drivers.get(3).getAccumulatedTime() + FOURTH_PLACE_INITIAL_DELAY);
-       for (int i = 4; i < drivers.size(); i++) {
-           if(this.drivers.get(i).isEligibleToRace())
-           this.drivers.get(i).setAccumulatedTime(this.drivers.get(i).getAccumulatedTime() + LAST_PLACES_INITIAL_DELAY);
+       for (Driver d : drivers) {
+           d.setEligibleToRace(true);
+           d.setAccumulatedTime(0);
        }
+       Collections.sort(this.drivers, new DriverPointsComparator(-1));
+       System.out.println("Driver "+ this.drivers.get(0).getName()+"has initial delay: 0s");
+       this.drivers.get(1).setAccumulatedTime(this.drivers.get(1).getAccumulatedTime() + SECOND_PLACE_INITIAL_DELAY);
+       System.out.println("Driver "+ this.drivers.get(1).getName()+"has initial delay: "+ SECOND_PLACE_INITIAL_DELAY+ "s");
+       this.drivers.get(2).setAccumulatedTime(this.drivers.get(2).getAccumulatedTime() + THIRD_PLACE_INITIAL_DELAY);
+       System.out.println("Driver "+ this.drivers.get(2).getName()+"has initial delay: "+ THIRD_PLACE_INITIAL_DELAY+ "s");
+       this.drivers.get(3).setAccumulatedTime(this.drivers.get(3).getAccumulatedTime() + FOURTH_PLACE_INITIAL_DELAY);
+       System.out.println("Driver "+ this.drivers.get(3).getName()+"has initial delay: "+ FOURTH_PLACE_INITIAL_DELAY+ "s");
+       for (int i = 4; i < drivers.size(); i++) {
+           this.drivers.get(i).setAccumulatedTime(this.drivers.get(i).getAccumulatedTime() + LAST_PLACES_INITIAL_DELAY);
+           System.out.println("Driver "+ this.drivers.get(i).getName()+"has initial delay: "+ LAST_PLACES_INITIAL_DELAY+ "s");
+       }
+         System.out.println("\n");
     }
     
     void driveAverageLapTime(int i){
@@ -115,6 +121,7 @@ public class Championship {
            if(d.isEligibleToRace())
            d.setAccumulatedTime(d.getAccumulatedTime() + temp_time);
        }
+        System.out.println("Every driver time is increased by average lap time: "+temp_time+"s\n");
     }
     
     void applySpecialSkills(int lapNumber){
@@ -122,6 +129,7 @@ public class Championship {
            d.useSpecialSkill(lapNumber);
             //System.out.println( d.getName()+": " +d.getSpecialSkill());
        }
+        System.out.println("\n");
     }
     
     void checkMechanicalProblem(){
@@ -131,17 +139,18 @@ public class Championship {
                 rand_num_100 = RNG.getRandomValue(0, 99);
                 if(rand_num_100 < MINOR_MECHANICAL_FAULT_PROPABILITY){
                     d.setAccumulatedTime(d.getAccumulatedTime() + MINOR_REPARE_TIME);
-                    System.out.println("Driver "+ d.getName()+" has minor mechanical fault. \n");
+                    System.out.println("Driver "+ d.getName()+" has minor mechanical fault. +"+MINOR_REPARE_TIME+"s");
                 }else if (rand_num_100 >= MINOR_MECHANICAL_FAULT_PROPABILITY && rand_num_100 < MINOR_MECHANICAL_FAULT_PROPABILITY + MAJOR_MECHANICAL_FAULT_PROPABILITY){
                     d.setAccumulatedTime(d.getAccumulatedTime() + MAJOR_REPARE_TIME);
-                    System.out.println("Driver "+ d.getName()+" has major mechanical fault. \n");
+                    System.out.println("Driver "+ d.getName()+" has major mechanical fault.+"+MAJOR_REPARE_TIME+"s");
                 }else if(rand_num_100 == 99){
                     d.setEligibleToRace(false);
                     d.setAccumulatedTime(1000);
-                    System.out.println("Driver "+ d.getName()+" is eleminated form the race. \n");
+                    System.out.println("Driver "+ d.getName()+" is eleminated form the race.");
                 }
            }
        }
+        System.out.println("\n");
     }
     
     void printLeader(int lap){
@@ -165,6 +174,10 @@ public class Championship {
         for (Driver d : drivers) {
             d.setAccumulatedTime(0);
         }
+        Collections.sort(this.drivers, new DriverPointsComparator(-1));
+        for(int i = 0; i < drivers.size(); i++){
+            drivers.get(i).setRanking(i+1);
+        }
     }
     
     public void changeTires(int Lap){
@@ -182,9 +195,11 @@ public class Championship {
             for (Driver d : drivers) {
                 if(d.getRainTires()== false){
                     d.setAccumulatedTime(d.getAccumulatedTime() + 5);
-                    System.out.println("Driver "+ d.getName()+" has no rain tires. \n");
+                    System.out.println("Driver "+ d.getName()+" has no rain tires, and its time is increased by 5 sec.");
                 }
             }
+        }else{
+            System.out.println("Ne pada kisa.");
         }
     }
     /** METODA ZA SORTIRANJE STUDENATA****/

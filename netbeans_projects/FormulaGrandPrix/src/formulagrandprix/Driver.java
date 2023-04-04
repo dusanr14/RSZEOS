@@ -92,13 +92,16 @@ public class Driver implements Comparable<Driver> {
         int timeShortage = 0;
         if (this.specialSkill.equals("Cornering")){
             timeShortage = RNG.getRandomValue(LOWER_TH_CORNERING,HIGHER_TH_CORNERING);
+            System.out.println("Driver "+name+" applied his special skill: Cornering, cut time "+timeShortage+" seconds");
             temp = true;
         } else if (this.specialSkill.equals("Braking")) {
             timeShortage = RNG.getRandomValue(LOWER_TH_BREAKING,HIGHER_TH_BREAKING);
+            System.out.println("Driver "+name+" applied his special skill: Breaking, cut time "+timeShortage+" seconds");
             temp = true;
         } else if (this.specialSkill.equals("Overtaking")) {
             if(lapNumber % 3 == 2){
                 timeShortage = RNG.getRandomValue(LOWER_TH_OVERTAKING,HIGHER_TH_OVERTAKING);
+                System.out.println("Driver "+name+" applied his special skill: Overtaking, cut time "+timeShortage+" seconds");
                 temp = true;
             }
         }
@@ -109,8 +112,7 @@ public class Driver implements Comparable<Driver> {
     @Override
     public String toString() {
         return "Name: " + this.name + "\nSpecial skill: " + this.specialSkill +
-                "\nAccumulated time: " + this.accumulatedTime +  "\nAccumulated points: " + this.accumulatedPoints+
-                "\nRanking: " + this.ranking;
+                "\nAccumulated time: " + this.accumulatedTime +  "\nAccumulated points: " + this.accumulatedPoints;
     }
     
     @Override
